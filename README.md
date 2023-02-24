@@ -17,25 +17,25 @@ To use the converter, you can pipe the contents of your CSV or PRN file to the u
 1. CSV to HTML
 
 ```
-cat ./Workbook2.csv | your-solution csv html > csv.html.txt
+cat ./Workbook2.csv | node fileConverter.js csv html > csv.html.txt
 ```
 
 2. PRN to HTML
 
 ```
-cat ./Workbook2.prn | your-solution prn html > prn.html.txt
+cat ./Workbook2.prn | node fileConverter.js prn html > prn.html.txt
 ```
 
 3. CSV to JSON
 
 ```
-cat ./Workbook2.csv | your-solution csv json > csv.json.txt
+cat ./Workbook2.csv | node fileConverter.js csv json > csv.json.txt
 ```
 
 4. PRN to JSON
 
 ```
-cat ./Workbook2.prn | your-solution prn json > prn.json.txt
+cat ./Workbook2.prn | node fileConverter.js prn json > prn.json.txt
 ```
 
 In this example, my_file.csv is piped into the fileConverter.js file, with the input format specified as csv and the output format specified as html. The resulting HTML output is then saved to my_file.html.
