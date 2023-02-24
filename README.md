@@ -12,7 +12,7 @@ npm install
 
 ## Usage
 
-To use the converter, you can pipe the contents of your CSV or PRN file to the utility and specify the output format using a command line option. Here's an example:
+To use the converter, you can pipe the contents of your CSV or PRN file to the utility and specify the output format using a command line option. Here are example commands:
 
 1. CSV to HTML
 
@@ -38,21 +38,17 @@ cat ./Workbook2.csv | node fileConverter.js csv json > csv.json.txt
 cat ./Workbook2.prn | node fileConverter.js prn json > prn.json.txt
 ```
 
-In this example, my_file.csv is piped into the fileConverter.js file, with the input format specified as csv and the output format specified as html. The resulting HTML output is then saved to my_file.html.
-
-You can also specify json as the output format to get JSON output instead of HTML.
-
 ## Options
 
 This utility supports two command line options:
 
-- csv: Specifies that the input file format is CSV.
+- **csv**: Specifies that the input file format is CSV.
 
-- prn: Specifies that the input file format is PRN.
+- **prn**: Specifies that the input file format is PRN.
 
-- html: Specifies that the output file format is HTML.
+- **html**: Specifies that the output file format is HTML.
 
-- json: Specifies that the output file format is JSON.
+- **json**: Specifies that the output file format is JSON.
 
 Note that the input and output formats must be specified in the correct order, otherwise the utility will not work properly.
 
@@ -60,6 +56,6 @@ Note that the input and output formats must be specified in the correct order, o
 
 The csv-parse package is used to parse the CSV input data. Depending on the specified output format, the input data is processed and converted into either HTML or JSON output.
 
-For CSV input files, the output HTML consists of a table with each row represented as a table row (<tr>) and each column as a table cell (<td>).
+For CSV input files, the output HTML consists of a table with each row represented as a table row `<tr>` and each column as a table cell `<td>` (except headers which are represented as `<th>`).
 
 For PRN input files, the output HTML simply consists of the raw input data as a string, since there is no standardized format for PRN files.
