@@ -1,5 +1,6 @@
 const { parse } = require("csv-parse");
 
+// Standard file types
 const FILE_TYPE = {
   CSV: "csv",
   PRN: "prn",
@@ -7,12 +8,41 @@ const FILE_TYPE = {
   JSON: "json",
 };
 
+/**
+ * Encode input stream with `utf8`
+ * @param {ReadStream} stream
+ * @returns {Buffer}
+ */
 async function read(stream) {
   const chunks = [];
   for await (const chunk of stream) chunks.push(chunk);
   return Buffer.concat(chunks).toString("utf8");
 }
 
+/**
+ * Convert given number to formatted date
+ * @param {number} date
+ * @returns {Date} formatted date
+ */
+function toDate(date) {
+  return new Date(date).toLocaleDateString("en-US");
+}
+
+/**
+ * Convert given number to formatted currency
+ * @param {number} currency
+ * @returns {string} formatted currency
+ */
+function toCurrency(currency) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(currency);
+}
+
+// Main file converter function
 const fileConverter = async (input, output) => {
   const inputFile = process.argv[2];
   const outputFile = process.argv[3];
@@ -31,15 +61,10 @@ const fileConverter = async (input, output) => {
               let d = data;
               if (i === row.length - 1) {
                 // Date conversion
-                d = new Date(d).toLocaleDateString("en-US");
+                d = toDate(d);
               } else if (i === row.length - 2) {
                 // Currency conversion
-                d = new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                }).format(d);
+                d = toCurrency(d);
               }
               output.write(`<td>${d}</td>\n`);
             } else {
@@ -68,13 +93,8 @@ const fileConverter = async (input, output) => {
         .on("data", function (row) {
           const convertedData = {
             ...row,
-            "Credit Limit": new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            }).format(row["Credit Limit"]),
-            Birthday: new Date(row["Birthday"]).toLocaleDateString("en-US"),
+            "Credit Limit": toCurrency(row["Credit Limit"]),
+            Birthday: toDate(row["Birthday"]),
           };
 
           data.push(convertedData);
@@ -116,16 +136,11 @@ const fileConverter = async (input, output) => {
           let d = data;
           if (i === row.length - 1) {
             // Date conversion
-            d = new Date(Number(d)).toLocaleDateString("en-US");
+            d = toDate(Number(d));
           } else if (i === row.length - 2) {
             // Currency conversion
             d = d.substring(0, d.length - 2) + "." + d.substring(d.length - 2);
-            d = new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            }).format(Number(d));
+            d = toCurrency(Number(d));
           }
           output.write(`<td>${d}</td>\n`);
         });
@@ -155,16 +170,11 @@ const fileConverter = async (input, output) => {
           let d = data;
           if (i === row.length - 1) {
             // Date conversion
-            d = new Date(Number(d)).toLocaleDateString("en-US");
+            d = toDate(Number(d));
           } else if (i === row.length - 2) {
             // Currency conversion
             d = d.substring(0, d.length - 2) + "." + d.substring(d.length - 2);
-            d = new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            }).format(Number(d));
+            d = toCurrency(Number(d));
           }
           obj[keys[i]] = d;
         });
